@@ -4,15 +4,16 @@ import uuid
 import labelbox
 from labelbox import Client, FileConverter, types as lb_types, LabelImport
 import json
+from dotenv import load_dotenv
 
 # ==========================
 # Configuration Parameters
 # ==========================
 
-# Replace with your actual Labelbox API key
-LB_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHh1dGxiNnAwNW8yMDd6eDV1djRncnZqIiwib3JnYW5pemF0aW9uSWQiOiJjbHh1dGxiNmMwNW8xMDd6eDEybjM4eXYyIiwiYXBpS2V5SWQiOiJjbTFxMTJjYnYwNXBoMDcwZWZ3Y3UzZ2hqIiwic2VjcmV0IjoiMDAxMzA1YmJlYTY2NzNjMGFjNmYwM2UwNmIyMTEwOWIiLCJpYXQiOjE3Mjc3NjIzMDEsImV4cCI6MjM1ODkxNDMwMX0.iT2qzTR9W3zAaJjZUFMEr-aRj3u2aFbaqJKxzZpik_k'  # Ensure you set this
+load_dotenv()
 
-# Replace with your actual Labelbox Project ID
+LB_API_KEY = os.environ.get('LABELBOX_API_KEY')
+
 PROJECT_ID = 'clyhq3smz027j07ve39u06lwr'
 
 # Your existing Export Task ID
@@ -66,10 +67,10 @@ def download_exported_data(client, export_task_id, file_path):
         file_path: The local file path to save the exported data.
     """
     export_task = labelbox.ExportTask.get_task(client, "cm1q1gzhk00k6071l4qwjdd2o")
-    
+
     # Initialize the FileConverter with the desired local file path
     converter = FileConverter(file_path=file_path)
-    
+
     # Start the download stream
     print(f"Starting download of export data to '{file_path}'...")
     export_task.get_stream(converter=converter).start()
@@ -122,7 +123,7 @@ def create_annotations():
                 lb_types.ClassificationAnswer(name="annotations"),
                 lb_types.ClassificationAnswer(name="colors"),
                 lb_types.ClassificationAnswer(name="icons")
-            ])  
+            ])
         ),
         lb_types.ClassificationAnnotation(
             name="drawing_size",
@@ -136,7 +137,7 @@ def create_annotations():
                 lb_types.ClassificationAnswer(name="edits"),
                 lb_types.ClassificationAnswer(name="bounding_boxes"),
                 lb_types.ClassificationAnswer(name="random_order")
-            ])  
+            ])
         ),
         lb_types.ClassificationAnnotation(
             name="ipad_orientation",
@@ -148,7 +149,7 @@ def create_annotations():
                 lb_types.ClassificationAnswer(name="repeated_element"),
                 lb_types.ClassificationAnswer(name="unique_minor_element"),
                 lb_types.ClassificationAnswer(name="unique_major_element")
-            ])  
+            ])
         ),
         lb_types.ClassificationAnnotation(
             name="freeform_tools_used",
@@ -164,7 +165,7 @@ def create_annotations():
                 lb_types.ClassificationAnswer(name="fill"),
                 lb_types.ClassificationAnswer(name="zoom_in_out"),
                 lb_types.ClassificationAnswer(name="stroke_thickness")
-            ])  
+            ])
         ),
         lb_types.ClassificationAnnotation(
             name="copy_previous_notation",
@@ -272,7 +273,7 @@ def create_labels(project, data_rows, annotations):
         except Exception as e:
             print(f"An error occurred while uploading labels: {e}")
     else:
-        print("No labels to upload.")   
+        print("No labels to upload.")
 
 # ==========================
 # Main Workflow Execution

@@ -1,13 +1,13 @@
 import time
 import os
 import labelbox
+from dotenv import load_dotenv
 
-# ==========================
-# Configuration Parameters
-# ==========================
+# Make sure to set environment variables for the Labelbox API key
+# LABELBOX_API_KEY=your-api-key
+load_dotenv()
 
-# Replace with your actual Labelbox API key
-LB_API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbHh1dGxiNnAwNW8yMDd6eDV1djRncnZqIiwib3JnYW5pemF0aW9uSWQiOiJjbHh1dGxiNmMwNW8xMDd6eDEybjM4eXYyIiwiYXBpS2V5SWQiOiJjbTFxMTJjYnYwNXBoMDcwZWZ3Y3UzZ2hqIiwic2VjcmV0IjoiMDAxMzA1YmJlYTY2NzNjMGFjNmYwM2UwNmIyMTEwOWIiLCJpYXQiOjE3Mjc3NjIzMDEsImV4cCI6MjM1ODkxNDMwMX0.iT2qzTR9W3zAaJjZUFMEr-aRj3u2aFbaqJKxzZpik_k'
+LB_API_KEY = os.environ.get('LABELBOX_API_KEY')
 
 # Replace with your actual Labelbox Project ID
 PROJECT_ID = 'clyhq3smz027j07ve39u06lwr'
