@@ -6,12 +6,15 @@ from labelbox import Client, FileConverter, types as lb_types, LabelImport
 import json
 from dotenv import load_dotenv
 
+# Code from Labelbox Documentation
+
 # ==========================
 # Configuration Parameters
 # ==========================
 
 load_dotenv()
 
+# ASK Lucas to give you the API key access
 LB_API_KEY = os.environ.get('LABELBOX_API_KEY')
 
 PROJECT_ID = 'clyhq3smz027j07ve39u06lwr'
@@ -245,7 +248,8 @@ def create_labels(project, data_rows, annotations):
     """
     labels_to_create = []
     for row in data_rows:
-        external_id = row.get("data_row").get('external_id') 
+        # TODO: Fix this to properly extract the external_id
+        external_id = row.get("data_row").get('external_id')
         id = row.get("data_row").get("id")
         if not external_id:
             print(f"Data row with UID {row.get('id')} does not have an external_id. Skipping.")
