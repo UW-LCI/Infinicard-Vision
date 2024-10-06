@@ -5,6 +5,7 @@ import labelbox
 from labelbox import Client, FileConverter, types as lb_types, LabelImport
 import json
 from dotenv import load_dotenv
+# from fix_busted_json import repair_json
 
 # Code from Labelbox Documentation
 
@@ -113,67 +114,6 @@ def create_annotations():
         List of Labelbox annotation objects.
     """
     annotations = [
-        lb_types.ClassificationAnnotation(
-            name="layout_accuracy",
-            value=lb_types.Radio(answer=lb_types.ClassificationAnswer(name="accurate"))  # Replace with actual value
-        ),
-        lb_types.ClassificationAnnotation(
-            name="interface_extension_representations",
-            value=lb_types.Checklist(answer=[
-                lb_types.ClassificationAnswer(name="anchors"),
-                lb_types.ClassificationAnswer(name="arrows"),
-                lb_types.ClassificationAnswer(name="name_relationships"),
-                lb_types.ClassificationAnswer(name="annotations"),
-                lb_types.ClassificationAnswer(name="colors"),
-                lb_types.ClassificationAnswer(name="icons")
-            ])
-        ),
-        lb_types.ClassificationAnnotation(
-            name="drawing_size",
-            value=lb_types.Radio(answer=lb_types.ClassificationAnswer(name="fills_i_pad_screen"))  # Replace with actual value
-        ),
-        lb_types.ClassificationAnnotation(
-            name="element_order",
-            value=lb_types.Checklist(answer=[
-                lb_types.ClassificationAnswer(name="top_to_bottom"),
-                lb_types.ClassificationAnswer(name="center_to_periphery"),
-                lb_types.ClassificationAnswer(name="edits"),
-                lb_types.ClassificationAnswer(name="bounding_boxes"),
-                lb_types.ClassificationAnswer(name="random_order")
-            ])
-        ),
-        lb_types.ClassificationAnnotation(
-            name="ipad_orientation",
-            value=lb_types.Radio(answer=lb_types.ClassificationAnswer(name="portrait"))  # Replace with actual value
-        ),
-        lb_types.ClassificationAnnotation(
-            name="skipped_elements",
-            value=lb_types.Checklist(answer=[
-                lb_types.ClassificationAnswer(name="repeated_element"),
-                lb_types.ClassificationAnswer(name="unique_minor_element"),
-                lb_types.ClassificationAnswer(name="unique_major_element")
-            ])
-        ),
-        lb_types.ClassificationAnnotation(
-            name="freeform_tools_used",
-            value=lb_types.Checklist(answer=[
-                lb_types.ClassificationAnswer(name="copy_paste"),
-                lb_types.ClassificationAnswer(name="select_moved_elements"),
-                lb_types.ClassificationAnswer(name="resize"),
-                lb_types.ClassificationAnswer(name="eraser"),
-                lb_types.ClassificationAnswer(name="highlighter"),
-                lb_types.ClassificationAnswer(name="color_picker"),
-                lb_types.ClassificationAnswer(name="shapes"),
-                lb_types.ClassificationAnswer(name="draw_and_hold_for_clean_lines"),
-                lb_types.ClassificationAnswer(name="fill"),
-                lb_types.ClassificationAnswer(name="zoom_in_out"),
-                lb_types.ClassificationAnswer(name="stroke_thickness")
-            ])
-        ),
-        lb_types.ClassificationAnnotation(
-            name="copy_previous_notation",
-            value=lb_types.Radio(answer=lb_types.ClassificationAnswer(name="true"))  # Replace with actual value
-        ),
         lb_types.ObjectAnnotation(
             name="Text",
             value=lb_types.Rectangle(
@@ -248,7 +188,6 @@ def create_labels(project, data_rows, annotations):
     """
     labels_to_create = []
     for row in data_rows:
-        # TODO: Fix this to properly extract the external_id
         external_id = row.get("data_row").get('external_id')
         id = row.get("data_row").get("id")
         if not external_id:
@@ -257,7 +196,7 @@ def create_labels(project, data_rows, annotations):
 
         label = lb_types.Label(
             data={
-                "global_key": external_id
+                "global_key": external_id # this is still mot allowed
             },
             annotations=annotations
         )
@@ -297,11 +236,10 @@ def main():
         data_rows = load_exported_data(EXPORT_OUTPUT_PATH)
 
         # Step 4: Define Annotations
-        annotations = create_annotations()
-        print(f"Created {len(annotations)} annotations.")
+        # annotations = create_annotations()
+        # print(f"Created {len(annotations)} annotations.")
 
-        # Step 5: Create Labels with Annotations
-        create_labels(project, data_rows, annotations)
+        # create_labels(project, data_rows, annotations)
 
     except Exception as e:
         print(f"An error occurred: {e}")
